@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegisterSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 @api_view(["POST"])
@@ -23,3 +24,13 @@ def register(request):
         )
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        refresh_token = response.data.get("refresh")
+        access_token = response.data.get("access")
+        if refresh_token and access_token:
+            response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)
+        return response
