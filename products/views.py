@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Product
 from .serializers import ProductSerializer
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 
 
 class ProductListView(APIView):
+
     def get(self, request):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
