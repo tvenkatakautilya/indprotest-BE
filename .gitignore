@@ -1,2 +1,10 @@
-.venv
+# Ignore all __pycache__ directories
+**/__pycache__/
+
+# Other ignores
+*.pyc
+*.pyo
+__pycache__/
+.env
 db.sqlite3
+
