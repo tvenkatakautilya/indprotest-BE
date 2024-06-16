@@ -6,6 +6,7 @@ from .serializers import RegisterSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import AuthUser
+from django.forms.models import model_to_dict
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -55,6 +56,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response_data = {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
+            "user":  model_to_dict(user, fields=['first_name', 'last_name', 'username', 'email'])
         }
 
         response = Response(response_data, status=status.HTTP_200_OK)

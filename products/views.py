@@ -36,8 +36,6 @@ class ProductListView(APIView):
 class ProductDetailView(APIView):
 
     def get_object(self, pk):
-        logger.info(pk)
-        logger.info("pk")
         try:
             
             return Product.objects.get(pk=pk)
