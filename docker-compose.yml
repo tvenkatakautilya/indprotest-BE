@@ -1,0 +1,53 @@
+version: '3.8'
+
+networks:
+  my-net:
+    driver: bridge
+    external: true
+
+
+services:
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - my-net
+    expose:
+      - 5432
+
+  web:
+    env_file:
+      - .env
+    build: .
+    volumes:
+      - static_data:/app/static
+      - .:/app/
+    logging:
+      driver: json-file
+      options:
+          max-size: 50m
+    networks:
+      - my-net
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - static_data:/app/static
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_data:

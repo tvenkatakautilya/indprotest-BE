@@ -7,6 +7,9 @@ from rest_framework.views import APIView
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.permissions import IsAuthenticated
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProductListView(APIView):
@@ -33,7 +36,10 @@ class ProductListView(APIView):
 class ProductDetailView(APIView):
 
     def get_object(self, pk):
+        logger.info(pk)
+        logger.info("pk")
         try:
+            
             return Product.objects.get(pk=pk)
         except Product.DoesNotExist:
             raise Http404
